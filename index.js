@@ -5,7 +5,7 @@ const app = express()
 app.use(express.json())
 
 app.use('/', async (req, res, next)=>{
-    res.send("Hi and and hello")
+    res.send("Hi and hello")
 })
 
 const PORT = process.env.PORT || 3000
