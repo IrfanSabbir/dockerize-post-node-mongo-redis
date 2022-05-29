@@ -26,10 +26,10 @@ const mongooseConnectionAndRetry = () => {
 }
 mongooseConnectionAndRetry();
 
-// const postRouter = require('./router/post');
+const postRouter = require('./router/post');
 const userRouter = require('./router/user');
 
-// app.use("/api/post",postRouter);
+app.use("/api/post",postRouter);
 app.use("/api/auth",userRouter);
 
 app.use('/', async (req, res, next)=>{
