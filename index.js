@@ -1,8 +1,17 @@
 require('dotenv').config();
 const express = require('express')
 const mongoose = require('mongoose');
+const redis = require('redis');
+const session = require("express-session")
+let RedisStore = require("connect-redis")(session)
 
-const { MONGO_PROD_IP, MONGO_PROD_USER, MONGO_PROD_PASS } = require('./config/confiig');
+const { MONGO_PROD_IP, MONGO_PROD_USER, MONGO_PROD_PASS, REDIS_URL, REDIS_PORT,
+    REDIS_SECRET} = require('./config/confiig');
+
+let redisClient = redis.createClient({
+    host: REDIS_URL,
+    port: REDIS_PORT
+})
 
 const app = express()
 app.use(express.json())
@@ -25,6 +34,31 @@ const mongooseConnectionAndRetry = () => {
         });
 }
 mongooseConnectionAndRetry();
+
+// app.use(
+//   session({
+//     store: new RedisStore({ client: redisClient }),
+//     saveUninitialized: false,
+//     secret: REDIS_SECRET,
+//     resave: false,
+//   })
+// )
+
+// Redis has problem with Windows
+app.use(
+  session({
+    store: new RedisStore({ client: redisClient }),
+    secret: REDIS_SECRET,
+    cookie:{
+      resave: false,
+      saveUninitialized: false,
+      secure: false,
+      httpOnly: true, 
+      maxAge: 3000000
+    }
+  })
+
+);
 
 const postRouter = require('./router/post');
 const userRouter = require('./router/user');

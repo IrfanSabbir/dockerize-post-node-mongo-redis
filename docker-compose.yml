@@ -6,6 +6,7 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
+      - REDIS_SECRET=MY_REDDIS_SESSION
     depends_on:
       - mongo  
   mongo:
@@ -15,5 +16,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: myPassword
     volumes:
       - mongo-db:/data/db
+
+  redis:
+    image: redis   
 volumes:
   mongo-db:
