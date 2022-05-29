@@ -12,7 +12,7 @@ exports.signUp = async (req, res, next)=>{
             name:req.body.name,
             password:password,
         })
-        // req.session.user = user
+        req.session.user = user
         await user.save()
  
         res.status(200).json({
@@ -42,7 +42,9 @@ exports.logIn = async (req, res, next)=>{
          if(password !== user.password){
             throw new Error("Invalid password, try again!")
          }
-        //  req.session.user = user
+console.log(req.session)
+
+         req.session.user = user
          res.status(200).json({
              message:"Successful Login",
              user,

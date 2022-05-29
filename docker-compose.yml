@@ -6,6 +6,7 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
+      - REDIS_SECRET=MY_REDDIS_SESSION
     depends_on:
       - mongo  
   mongo:
