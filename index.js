@@ -3,6 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose');
 const redis = require('redis');
 const session = require("express-session")
+const cors = require('cors');
 let RedisStore = require("connect-redis")(session)
 
 const { MONGO_PROD_IP, MONGO_PROD_USER, MONGO_PROD_PASS, REDIS_URL, REDIS_PORT,
@@ -15,6 +16,9 @@ let redisClient = redis.createClient({
 
 const app = express()
 app.use(express.json())
+
+app.use(cors());
+app.enable('trust proxy');
 
 const environment = process.env.NODE_ENV;
 const MONG_URL = environment === "development" 
@@ -45,29 +49,30 @@ mongooseConnectionAndRetry();
 // )
 
 // Redis has problem with Windows
-app.use(
-  session({
-    store: new RedisStore({ client: redisClient }),
-    secret: REDIS_SECRET,
-    cookie:{
-      resave: false,
-      saveUninitialized: false,
-      secure: false,
-      httpOnly: true, 
-      maxAge: 3000000
-    }
-  })
+// app.use(
+//   session({
+//     store: new RedisStore({ client: redisClient }),
+//     secret: REDIS_SECRET,
+//     cookie:{
+//       resave: false,
+//       saveUninitialized: false,
+//       secure: false,
+//       httpOnly: true, 
+//       maxAge: 3000000
+//     }
+//   })
 
-);
+// );
 
 const postRouter = require('./router/post');
 const userRouter = require('./router/user');
 
-app.use("/api/post",postRouter);
-app.use("/api/auth",userRouter);
+app.use("/api/v1/post",postRouter);
+app.use("/api/v1/auth",userRouter);
 
-app.use('/', async (req, res, next)=>{
+app.use('/api/v1', async (req, res, next)=>{
     res.send("Hi and hello")
+    console.log("Hi and hello")
 })
 
 const PORT = process.env.PORT || 3000

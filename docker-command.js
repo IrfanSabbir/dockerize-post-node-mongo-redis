@@ -64,4 +64,8 @@
  *  ==> docker run -v %cd%:/app:ro -v /app/node_modules --env-file ./.env-p 3000:3000 -d --name node-app node-app-image
  *  ==> docker run -v {pwd}:/app:ro -v /app/node_modules --env-file ./.env -p 3000:3000 -d --name node-app node-app-image
  * 
+ * command: docker logs container_name -f(for follow, real time updates the logs on terminal)
+ * docker compose  -f docker-compose.yml -f docker-dompose.dev.yml up -d -V(Recreate anonymous data instead recreating from old container)
+ * docker compose  -f docker-compose.yml -f docker-dompose.dev.yml up -d --scale node-app=2(service_name: num, is to scale multipe instance of a container)
+ * 
  */
